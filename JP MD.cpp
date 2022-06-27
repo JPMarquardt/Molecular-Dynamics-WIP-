@@ -1,5 +1,12 @@
 #include <iostream>
+//#include "/Users/paul/opt/miniconda3/pkgs/python-3.9.12-hdfd78df_0/include/python3.9/Python.h"
+//#include <matplotlib-cpp-master/python.h>
 #include <cmath>
+
+//#include "/usr/local/Cellar/python@3.9/3.9.13_1/Frameworks/Python.framework/Versions/3.9/include/python3.9"
+
+//#include "matplotlibcpp.h"
+
 using namespace std;
 
 class ferm{
@@ -25,12 +32,9 @@ class ferm{
     double yBT;
     double yBB;
 
-    void print(int i){
-        cout << this -> xPos;
-        cout << this -> yPos;
-    }
     void print(){
         cout << this -> xPos <<endl;
+        cout << this -> yPos <<endl;
     }
 };
 
@@ -69,7 +73,7 @@ void iterate(ferm inFerm[],int n){
                 //add extra forces?
 
                 xFSum = xCL + xFSum;//add in extra forces to the force sum
-                xFSum = xCL + xFSum;
+                yFSum = yCL + yFSum;
             }
         }
 
@@ -106,17 +110,19 @@ int main(){
     mols1.mass = 1;
     mols1.charge = 1;
     mols1.xBB = 0;
-    mols1.xBT = 2;
+    mols1.xBT = 10;
     mols1.yBB = 0;
-    mols1.yBT = 2;
+    mols1.yBT = 10;
 
     mols[0] = mols1;
     mols[1] = mols1;
     mols[1].xPos = 0.5;
+    mols[1].yPos = 8.5;
 
-    for(int i = 0; i<20; i++){
+    for(int i = 0; i<200; i++){
         iterate(mols,2);
-        cout << mols[0].xPos <<endl;
+
+        cout << mols[1].xPos << "," << mols[1].yPos << ";" << endl;
 
     }
 
