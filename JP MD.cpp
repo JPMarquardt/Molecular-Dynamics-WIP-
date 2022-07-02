@@ -50,12 +50,16 @@ void iterate(ferm inFerm[],int n){
     double xCL = 0;
     double xBC = 0;
     double xFSum = 0;
+    double xAbove = 0;
+    double xBelow = 0;
 
     double yPosNew;
     double yMP = 0;
     double yCL = 0;
     double yBC = 0;//boundary condition for if I ever want to impliment soft edge boundaries
     double yFSum = 0;
+    double yAbove = 0;
+    double yBelow = 0;
 
     //double zPosNew;
 
@@ -70,12 +74,12 @@ void iterate(ferm inFerm[],int n){
                 CL = -inFerm[i].charge * inFerm[j].charge/ pow(dist,2);
                 xCL = CL * abs(inFerm[i].xPos-inFerm[j].xPos) / dist;
                 yCL = CL * abs(inFerm[i].yPos-inFerm[j].yPos) / dist;
-                //add extra forces?
 
                 xFSum = xCL + xFSum;//add in extra forces to the force sum
                 yFSum = yCL + yFSum;
             }
         }
+
 
         inFerm[i].xPos = (0.5 * xFSum * pow(dt,2) / inFerm[i].mass)  + (inFerm[i].xMom * dt/inFerm[i].mass) + inFerm[i].xPos;
         inFerm[i].yPos = (0.5 * yFSum * pow(dt,2) / inFerm[i].mass) + (inFerm[i].yMom * dt / inFerm[i].mass) + inFerm[i].yPos;
@@ -84,11 +88,29 @@ void iterate(ferm inFerm[],int n){
         inFerm[i].xMom = xFSum * dt + inFerm[i].xMom;
         inFerm[i].yMom = yFSum * dt + inFerm[i].yMom;
 
-        if(inFerm[i].xPos > inFerm[i].xBT || inFerm[i].xPos < inFerm[i].xBB){
-            inFerm[i].xMom = -inFerm[i].xMom;
+        while(inFerm[i].xPos > inFerm[i].xBT || inFerm[i].xPos < inFerm[i].xBB){
+            inFerm[i].xMom = -inFerm[i].xMom;//using a good timescale should allow this to be an if statement
+            xAbove = abs(inFerm[i].xPos - inFerm[i].xBT);
+            xBelow = abs(inFerm[i].xPos - inFerm[i].xBB);
+
+            if(xAbove < xBelow){
+                inFerm[i].xPos = inFerm[i].xBT - xAbove;
+            }
+            else{
+                inFerm[i].xPos = inFerm[i].xBB + xBelow;
+            }
         }
-        if(inFerm[i].yPos > inFerm[i].yBT || inFerm[i].yPos < inFerm[i].yBB){
+        while(inFerm[i].yPos > inFerm[i].yBT || inFerm[i].yPos < inFerm[i].yBB){
             inFerm[i].yMom = -inFerm[i].yMom;
+            yAbove = abs(inFerm[i].yPos - inFerm[i].yBT);
+            yBelow = abs(inFerm[i].yPos - inFerm[i].yBB);
+
+            if(yAbove < yBelow){
+                inFerm[i].yPos = inFerm[i].yBT - yAbove;
+            }
+            else{
+                inFerm[i].yPos = inFerm[i].yBB + yBelow;
+            }
         }
         //inFerm[i].zMom = zCL*dt + inFerm[i].zMom;
 
