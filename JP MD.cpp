@@ -1,3 +1,11 @@
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
 #include <iostream>
 //#include "/Users/paul/opt/miniconda3/pkgs/python-3.9.12-hdfd78df_0/include/python3.9/Python.h"
 //#include <matplotlib-cpp-master/python.h>
@@ -11,19 +19,19 @@ using namespace std;
 
 class ferm{
     public:
-    double xPos;
+    double xPos;//measured in angstrom
     double yPos;
     double zPos;
 
-    double xMom;
+    double xMom;//measured in eV/c
     double yMom;
     double zMom;
 
     double theta;
     double phi;
 
-    double mass;
-    double charge;
+    double mass;//measured in eV/c^2
+    double charge;//measured in elementary charge
     double dipole;
 
     double xBT;
@@ -42,7 +50,7 @@ class ferm{
 
 void iterate(ferm inFerm[],int n){
     double dist = 0;
-    double dt = 0.1;
+    double dt = 10000;//a few femto seconds measured in angstrom/c
     double CL = 0;
 
     double xPosNew;
@@ -71,9 +79,9 @@ void iterate(ferm inFerm[],int n){
             if(i != j){
                 dist = sqrt(pow(inFerm[i].xPos - inFerm[j].xPos,2) + pow(inFerm[i].yPos - inFerm[j].yPos,2));
 
-                CL = -inFerm[i].charge * inFerm[j].charge/ pow(dist,2);
-                xCL = CL * abs(inFerm[i].xPos-inFerm[j].xPos) / dist;
-                yCL = CL * abs(inFerm[i].yPos-inFerm[j].yPos) / dist;
+                CL = - 14.3996 * inFerm[i].charge * inFerm[j].charge/ pow(dist,2);
+                xCL = CL * (inFerm[i].xPos-inFerm[j].xPos) / dist;
+                yCL = CL * (inFerm[i].yPos-inFerm[j].yPos) / dist;
 
                 xFSum = xCL + xFSum;//add in extra forces to the force sum
                 yFSum = yCL + yFSum;
@@ -126,25 +134,30 @@ int main(){
     ferm mols[2];
 
     mols1.xPos =  1;
-    mols1.xMom = 1;
+    mols1.xMom = 54000;//based on the velocity of rms velcity of argon at stp and mass of an argon atom
     mols1.yPos =  1;
     mols1.yMom = 1;
-    mols1.mass = 1;
+    mols1.mass = 937000000;//based on mass of an argon atom in eV/c^2
     mols1.charge = 1;
     mols1.xBB = 0;
-    mols1.xBT = 10;
+    mols1.xBT = 125;//an arbitrary value based on the density of argon at stp
     mols1.yBB = 0;
-    mols1.yBT = 10;
+    mols1.yBT = 125;
 
     mols[0] = mols1;
     mols[1] = mols1;
-    mols[1].xPos = 0.5;
-    mols[1].yPos = 8.5;
+    mols[1].xPos = 70;
+    mols[1].yPos = 40;
+    mols[1].yMom = 54000;
 
-    for(int i = 0; i<200; i++){
+    for(int i = 0; i<2000; i++){
         iterate(mols,2);
 
-        cout << mols[1].xPos << "," << mols[1].yPos << ";" << endl;
+        cout << "momentum:" << mols[1].xMom << "," << mols[1].yMom << ";" << endl;
+        cout << "momentum:" << mols[0].xMom << "," << mols[0].yMom << ";" << endl;
+
+        cout << "position:" << mols[1].xPos << "," << mols[1].yPos << ";" << endl;
+        cout << "position:" << mols[0].xPos << "," << mols[0].yPos << ";" << endl;
 
     }
 
