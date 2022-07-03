@@ -1,11 +1,3 @@
-/******************************************************************************
-
-                              Online C++ Compiler.
-               Code, Compile, Run and Debug C++ program online.
-Write your code in this editor and press "Run" button to compile and execute it.
-
-*******************************************************************************/
-
 #include <iostream>
 //#include "/Users/paul/opt/miniconda3/pkgs/python-3.9.12-hdfd78df_0/include/python3.9/Python.h"
 //#include <matplotlib-cpp-master/python.h>
