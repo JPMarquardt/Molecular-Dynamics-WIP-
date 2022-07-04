@@ -142,7 +142,7 @@ int main(){
     mols[1].yPos = 40;
     mols[1].yMom = 54000;
 
-    for(int i = 0; i<2000; i++){
+    for(int i = 0; i<200000; i++){
         iterate(mols,2);
         if(0 == (i % 100)){
             cout << "momentum:" << mols[1].xMom << "," << mols[1].yMom << ";" << endl;
