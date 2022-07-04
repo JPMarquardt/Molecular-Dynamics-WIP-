@@ -144,13 +144,13 @@ int main(){
 
     for(int i = 0; i<2000; i++){
         iterate(mols,2);
+        if(0 == (i % 100)){
+            cout << "momentum:" << mols[1].xMom << "," << mols[1].yMom << ";" << endl;
+            cout << "momentum:" << mols[0].xMom << "," << mols[0].yMom << ";" << endl;
 
-        cout << "momentum:" << mols[1].xMom << "," << mols[1].yMom << ";" << endl;
-        cout << "momentum:" << mols[0].xMom << "," << mols[0].yMom << ";" << endl;
-
-        cout << "position:" << mols[1].xPos << "," << mols[1].yPos << ";" << endl;
-        cout << "position:" << mols[0].xPos << "," << mols[0].yPos << ";" << endl;
-
+            cout << "position:" << mols[1].xPos << "," << mols[1].yPos << ";" << endl;
+            cout << "position:" << mols[0].xPos << "," << mols[0].yPos << ";" << endl;
+        }
     }
 
 
