@@ -143,14 +143,16 @@ int main(){
     mols[1].yMom = 54000;
 
     for(int i = 0; i<200000; i++){
-        iterate(mols,2);
         if(0 == (i % 100)){
-            cout << "momentum:" << mols[1].xMom << "," << mols[1].yMom << ";" << endl;
-            cout << "momentum:" << mols[0].xMom << "," << mols[0].yMom << ";" << endl;
+            cout << "P1 momentum: " << mols[1].xMom << "," << mols[1].yMom << "; ";
+            cout << "P2 momentum: " << mols[0].xMom << "," << mols[0].yMom << "; ";
 
-            cout << "position:" << mols[1].xPos << "," << mols[1].yPos << ";" << endl;
-            cout << "position:" << mols[0].xPos << "," << mols[0].yPos << ";" << endl;
+            //cout << "P1 position:" << mols[1].xPos << "," << mols[1].yPos << "; ";
+            //cout << "P2 position:" << mols[0].xPos << "," << mols[0].yPos << "; ";
+            
+            cout << "Total energy: " << 0.5 * (pow(mols[1].xMom,2)+pow(mols[1].yMom,2)+pow(mols[0].xMom,2)+pow(mols[0].yMom,2)) / mols[1].mass << ";" << endl;
         }
+        iterate(mols,2);
     }
 
 
