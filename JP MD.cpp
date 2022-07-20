@@ -42,22 +42,22 @@ class ferm{
 
 void iterate(ferm inFerm[],int n){
     double dist = 0;
-    double dt = 10000;//a few femto seconds measured in angstrom/c
+    double dt = 1000;//a few femto seconds measured in angstrom/c
     double CL = 0;
 
     double xPosNew;
     double xMP = 0;
-    double xCL = 0;
+    double xCL[n][n];
     double xBC = 0;
-    double xFSum = 0;
+    double xFSum[n];
     double xAbove = 0;
     double xBelow = 0;
 
     double yPosNew;
     double yMP = 0;
-    double yCL = 0;
+    double yCL[n][n];
     double yBC = 0;//boundary condition for if I ever want to impliment soft edge boundaries
-    double yFSum = 0;
+    double yFSum[n];
     double yAbove = 0;
     double yBelow = 0;
 
@@ -66,27 +66,31 @@ void iterate(ferm inFerm[],int n){
     //double thetaNew;
     //double phiNew;
 
+
     for(int i = 0; i < n; i++) {
         for(int j=0; j < n; j++){
-            if(i != j){
-                dist = sqrt(pow(inFerm[i].xPos - inFerm[j].xPos,2) + pow(inFerm[i].yPos - inFerm[j].yPos,2));
+            if(i!=j){
+            dist = sqrt(pow(inFerm[i].xPos - inFerm[j].xPos,2) + pow(inFerm[i].yPos - inFerm[j].yPos,2));
 
-                CL = - 14.3996 * inFerm[i].charge * inFerm[j].charge/ pow(dist,2);
-                xCL = CL * (inFerm[i].xPos-inFerm[j].xPos) / dist;
-                yCL = CL * (inFerm[i].yPos-inFerm[j].yPos) / dist;
+            CL = - 14.3996 * inFerm[i].charge * inFerm[j].charge/ pow(dist,2);//from wikipedia
+            xCL[i][j] = CL * (inFerm[i].xPos-inFerm[j].xPos) / dist;
+            yCL[i][j] = CL * (inFerm[i].yPos-inFerm[j].yPos) / dist;
 
-                xFSum = xCL + xFSum;//add in extra forces to the force sum
-                yFSum = yCL + yFSum;
+            xFSum[i] = xCL[i][j] + xFSum[i];//add in extra forces to the force sum
+            yFSum[i] = yCL[i][j] + yFSum[i];
             }
         }
 
+    }
 
-        inFerm[i].xPos = (0.5 * xFSum * pow(dt,2) / inFerm[i].mass)  + (inFerm[i].xMom * dt/inFerm[i].mass) + inFerm[i].xPos;
-        inFerm[i].yPos = (0.5 * yFSum * pow(dt,2) / inFerm[i].mass) + (inFerm[i].yMom * dt / inFerm[i].mass) + inFerm[i].yPos;
+    for(int i = 0; i < n; i++) {
+
+        inFerm[i].xPos = (0.5 * xFSum[i] * pow(dt,2) / inFerm[i].mass)  + (inFerm[i].xMom * dt/inFerm[i].mass) + inFerm[i].xPos;
+        inFerm[i].yPos = (0.5 * yFSum[i] * pow(dt,2) / inFerm[i].mass) + (inFerm[i].yMom * dt / inFerm[i].mass) + inFerm[i].yPos;
         //inFerm[i].zPos =
         
-        inFerm[i].xMom = xFSum * dt + inFerm[i].xMom;
-        inFerm[i].yMom = yFSum * dt + inFerm[i].yMom;
+        inFerm[i].xMom = xFSum[i] * dt + inFerm[i].xMom;
+        inFerm[i].yMom = yFSum[i] * dt + inFerm[i].yMom;
 
         while(inFerm[i].xPos > inFerm[i].xBT || inFerm[i].xPos < inFerm[i].xBB){
             inFerm[i].xMom = -inFerm[i].xMom;//using a good timescale should allow this to be an if statement
@@ -142,7 +146,7 @@ int main(){
     mols[1].yPos = 40;
     mols[1].yMom = 54000;
 
-    for(int i = 0; i<200000; i++){
+    for(int i = 0; i<2000000; i++){
         if(0 == (i % 100)){
             cout << "P1 momentum: " << mols[1].xMom << "," << mols[1].yMom << "; ";
             cout << "P2 momentum: " << mols[0].xMom << "," << mols[0].yMom << "; ";
