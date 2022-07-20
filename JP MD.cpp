@@ -79,7 +79,7 @@ void iterate(ferm inFerm[],int n){
             xFSum[i] = xCL[i][j] + xFSum[i];//add in extra forces to the force sum
             yFSum[i] = yCL[i][j] + yFSum[i];
             }
-        }
+        }//right now this does twice the computations necessary impliment bottom left triangle of matrix method for more speed
 
     }
 
