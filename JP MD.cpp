@@ -130,15 +130,15 @@ int main(){
     ferm mols[2];
 
     mols1.xPos =  1;
-    mols1.xMom = 54000;//based on the velocity of rms velcity of argon at stp and mass of an argon atom
+    mols1.xMom = 64000;//based on the velocity of rms velcity of argon at stp and mass of an argon atom
     mols1.yPos =  1;
     mols1.yMom = 1;
     mols1.mass = 937000000;//based on mass of an argon atom in eV/c^2
     mols1.charge = 1;
     mols1.xBB = 0;
-    mols1.xBT = 125;//an arbitrary value based on the density of argon at stp
+    mols1.xBT = 1250;//an arbitrary value based on the density of argon at stp times 10
     mols1.yBB = 0;
-    mols1.yBT = 125;
+    mols1.yBT = 1250;
 
     mols[0] = mols1;
     mols[1] = mols1;
